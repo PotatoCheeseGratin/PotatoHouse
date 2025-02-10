@@ -24,7 +24,17 @@ jobs:
           with:
             distribution: 'temurin'
             java-version: '21'
-        - name: Make application ymls
+        - name: Make docker-compose.yml
+          run: echo "${{ secrets.DOKCER_COMPOSE_YML }}" | base64 -d > docker-compose.yml
+        - name: Run docker
+          run: docker-compose -f "docker-compose.yml" up -d mysql-potato redis-potato
+        - name: Wait for MySQL
+          run: |
+            while ! docker exec mysql-potato mysqladmin ping -h localhost --silent; do
+              echo "Waiting for MySQL..."
+              sleep 2
+            done
+        - name: Make application.yml
           run: |
             cd ./src/main/resources
             echo "${{ secrets.APPLICATION_YML }}" | base64 -d > application.yml
