@@ -3,7 +3,7 @@ coverage:
     project:
       default: false
       tests:
-        target: 0%
+        target: 0% # 허용 범위 지정
         paths:
           - "potatocountry/src"
         threshold: 0%      # 허용되는 감소 범위
