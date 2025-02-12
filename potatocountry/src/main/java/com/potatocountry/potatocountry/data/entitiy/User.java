@@ -26,10 +26,13 @@ public class User extends BaseEntity {
 	private String loginId;
 
 	@Column(nullable = false)
-	private String passwd;
+	private String password;
 
 	@Column(nullable = false)
 	private String username;
+
+	@Column(nullable = false)
+	private String nickname;
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, columnDefinition = "VARCHAR(20)")
