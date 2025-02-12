@@ -4,6 +4,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.potatocountry.potatocountry.data.entitiy.User;
 import com.potatocountry.potatocountry.data.repository.UserRepository;
 import com.potatocountry.potatocountry.domain.user.dto.request.UserCreateReqDto;
 import com.potatocountry.potatocountry.domain.user.dto.response.UserCreateResDto;
@@ -23,12 +24,12 @@ public class UserService {
 	public UserCreateResDto createUser(UserCreateReqDto userCreateReqDto) {
 		validateDuplicationId(userCreateReqDto.getLoginId());
 		validateDuplicationNickname(userCreateReqDto.getNickname());
-		new User(userCreateReqDto.getLoginId(), bCryptPasswordEncoder.encode(userCreateReqDto.getPassword()), userCreateReqDto.getUsername(), userCreateReqDto.getNickname())
+		User user = new User(userCreateReqDto.getLoginId(),
+			bCryptPasswordEncoder.encode(userCreateReqDto.getPassword()), userCreateReqDto.getUsername(),
+			userCreateReqDto.getNickname());
+		userRepository.save(user);
+		return UserCreateResDto.toDto(user);
 	}
-
-
-
-
 
 	private void validateDuplicationNickname(String nickname) {
 		if (userRepository.existsByNickname(nickname)) {
