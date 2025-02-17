@@ -21,13 +21,13 @@ public class CustomUserDetails implements UserDetails {
 	}
 
 	@Override
-	public String getPassword() {
-		return authUser.getPassword();
-	}
-
-	@Override
 	public String getUsername() {
 		return authUser.getUsername();
+	}
+	
+	@Override
+	public String getPassword() {
+		return authUser.getPassword();
 	}
 
 	@Override

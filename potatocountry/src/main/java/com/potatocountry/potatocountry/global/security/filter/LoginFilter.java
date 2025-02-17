@@ -1,5 +1,6 @@
 package com.potatocountry.potatocountry.global.security.filter;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,10 +19,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
 		AuthenticationException {
-		String loginId = obtainUsername(request);
+		String username = obtainUsername(request);
 		String password = obtainPassword(request);
 
-		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(loginId, password,
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password,
 			null);
 		return authenticationManager.authenticate(authToken);
 	}
@@ -36,5 +37,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	@Override
 	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 		AuthenticationException failed) {
+		response.setStatus(HttpStatus.UNAUTHORIZED.value());
 	}
 }
