@@ -13,11 +13,17 @@ import io.jsonwebtoken.Jwts;
 
 @Component
 public class JWTUtil {
-	private final SecretKey secretKey;
+	private static final String USERNAME = "username";
+	private static final String ROLE = "role";
 
-	public JWTUtil(@Value("${spring.jwt.secret}") String secret) {
-		secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
+	private final SecretKey secretKey;
+	private final Long expiredTimeMillis;
+
+	public JWTUtil(@Value("${spring.jwt.secret}") String secret,
+		@Value("${spring.jwt.expiration.access}") Long expiredTimeMillis) {
+		this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
 			Jwts.SIG.HS256.key().build().getAlgorithm());
+		this.expiredTimeMillis = expiredTimeMillis;
 	}
 
 	public String getUsername(String token) {
@@ -26,7 +32,7 @@ public class JWTUtil {
 			.build()
 			.parseSignedClaims(token)
 			.getPayload()
-			.get("username", String.class);
+			.get(USERNAME, String.class);
 	}
 
 	public String getRole(String token) {
@@ -35,7 +41,7 @@ public class JWTUtil {
 			.build()
 			.parseSignedClaims(token)
 			.getPayload()
-			.get("role", String.class);
+			.get(ROLE, String.class);
 	}
 
 	public Boolean isExpired(String token) {
@@ -48,12 +54,12 @@ public class JWTUtil {
 			.before(new Date());
 	}
 
-	public String createJwt(String username, String role, Long expiredMs) {
+	public String createJwt(String username, String role) {
 		return Jwts.builder()
-			.claim("username", username)
-			.claim("role", role)
+			.claim(USERNAME, username)
+			.claim(ROLE, role)
 			.issuedAt(new Date(System.currentTimeMillis()))
-			.expiration(new Date(System.currentTimeMillis() + expiredMs))
+			.expiration(new Date(System.currentTimeMillis() + expiredTimeMillis))
 			.signWith(secretKey)
 			.compact();
 	}
