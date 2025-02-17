@@ -32,9 +32,9 @@ public class AuthController {
 	@ApiResponses({
 		@ApiResponse(responseCode = "201", description = "201 성공",
 			content = @Content(mediaType = "application/json", schema = @Schema(implementation = JoinResDto.class))),
-		@ApiResponse(responseCode = "403", description = "403 닉네임이 중복입니다.",
+		@ApiResponse(responseCode = "UR100", description = "403 아이디가 중복입니다.",
 			content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResDto.class))),
-		@ApiResponse(responseCode = "403", description = "403 아이디가 중복입니다.",
+		@ApiResponse(responseCode = "UR101", description = "403 닉네임이 중복입니다.",
 			content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResDto.class))),
 	})
 	@PostMapping("/join")
