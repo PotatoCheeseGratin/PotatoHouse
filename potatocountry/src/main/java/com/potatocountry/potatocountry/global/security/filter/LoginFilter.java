@@ -12,7 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.potatocountry.potatocountry.global.security.dto.CustomUserDetails;
-import com.potatocountry.potatocountry.global.util.JWTUtil;
+import com.potatocountry.potatocountry.global.util.JwtUtil;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
-	private final JWTUtil jwtUtil;
+	private final JwtUtil jwtUtil;
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
@@ -47,7 +47,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 		GrantedAuthority auth = iterator.next();
 		String role = auth.getAuthority();
 
-		String token = jwtUtil.createJwt(username, role);
+		String token = jwtUtil.createToken(username, role);
 		response.addHeader("Authorization", "Bearer " + token);
 	}
 

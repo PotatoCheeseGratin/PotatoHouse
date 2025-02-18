@@ -12,8 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.potatocountry.potatocountry.global.security.filter.JwtFilter;
 import com.potatocountry.potatocountry.global.security.filter.LoginFilter;
-import com.potatocountry.potatocountry.global.util.JWTUtil;
+import com.potatocountry.potatocountry.global.security.service.CustomUserDetailsService;
+import com.potatocountry.potatocountry.global.util.JwtUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,15 +24,21 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 	private final AuthenticationConfiguration authenticationConfiguration;
-	private final JWTUtil jwtUtil;
+	private final CustomUserDetailsService customUserDetailsService;
+	private final JwtUtil jwtUtil;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http
 			.csrf(AbstractHttpConfigurer::disable)
 			.formLogin(AbstractHttpConfigurer::disable)
-			.httpBasic(AbstractHttpConfigurer::disable)
-			.authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+			.authorizeHttpRequests((auth) -> auth
+				.requestMatchers("/login", "/test", "/join", "/swagger-ui/**", "/swagger-resources/**",
+					"/v3/api-docs/**")
+				.permitAll()
+				.anyRequest()
+				.authenticated())
+			.addFilterBefore(new JwtFilter(customUserDetailsService, jwtUtil), LoginFilter.class)
 			.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil),
 				UsernamePasswordAuthenticationFilter.class)
 			.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
