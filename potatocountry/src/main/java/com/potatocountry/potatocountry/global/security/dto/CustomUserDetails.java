@@ -31,7 +31,9 @@ public class CustomUserDetails implements UserDetails {
 		return authUser.getPassword();
 	}
 
-	public Long getId() { return authUser.getId(); }
+	public Long getId() {
+		return authUser.getId();
+	}
 
 	@Override
 	public boolean isEnabled() {

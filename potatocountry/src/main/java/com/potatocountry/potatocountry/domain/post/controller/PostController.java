@@ -28,7 +28,8 @@ public class PostController {
 
 	@PostMapping
 	@Operation(security = {@SecurityRequirement(name = "bearerAuth")})
-	public ResponseEntity<PostResDto> createPost(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestBody @Valid PostReqDto postReqDto) {
+	public ResponseEntity<PostResDto> createPost(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+		@RequestBody @Valid PostReqDto postReqDto) {
 		PostResDto postResDto = postService.postCreate(customUserDetails, postReqDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(postResDto);
 	}

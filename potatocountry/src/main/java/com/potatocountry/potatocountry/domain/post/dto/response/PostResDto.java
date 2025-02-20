@@ -34,7 +34,8 @@ public class PostResDto {
 	private PostStatus status;
 
 	@Builder
-	public PostResDto(Long id, PostCategory category, String title, String content, String userNickname, Long imageCollectionId, Long viewCount, Long likeCount, PostStatus status) {
+	public PostResDto(Long id, PostCategory category, String title, String content, String userNickname,
+		Long imageCollectionId, Long viewCount, Long likeCount, PostStatus status) {
 		this.id = id;
 		this.category = category;
 		this.title = title;
@@ -47,7 +48,8 @@ public class PostResDto {
 	}
 
 	public static PostResDto toDto(Post post) {
-		return PostResDto.builder().id(post.getId())
+		return PostResDto.builder()
+			.id(post.getId())
 			.category(post.getCategory())
 			.title(post.getTitle())
 			.content(post.getContent())

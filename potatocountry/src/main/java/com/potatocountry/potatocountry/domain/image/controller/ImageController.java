@@ -28,7 +28,7 @@ public class ImageController {
 	@PostMapping
 	@Operation(security = {@SecurityRequirement(name = "bearerAuth")})
 	public ResponseEntity<ImageResDto> uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
-		Image image = imageService.ImageUpload(file);
+		Image image = imageService.imageUpload(file);
 		return ResponseEntity.status(HttpStatus.CREATED).body(ImageResDto.toDto(image));
 	}
 }
