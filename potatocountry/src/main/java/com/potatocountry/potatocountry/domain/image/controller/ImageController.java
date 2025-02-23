@@ -51,7 +51,7 @@ public class ImageController {
 	@Operation(summary = "이미지 삭제 API", description = "이미지를 삭제합니다.", security = {
 		@SecurityRequirement(name = "bearerAuth")})
 	@PatchMapping("/{id}")
-	public ResponseEntity<Void> deleteImage(@PathVariable @Valid Long id){
+	public ResponseEntity<Void> deleteImage(@PathVariable @Valid Long id) {
 		imageService.imageDelete(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
