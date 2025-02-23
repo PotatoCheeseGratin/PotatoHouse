@@ -30,25 +30,19 @@ public class ImageController {
 
 	private final ImageService imageService;
 
-	@Operation(
-		summary = "이미지 저장 API",
-		description = "새로운 이미지를 저장합니다.",
-		security = {@SecurityRequirement(name = "bearerAuth")}
-	)
+	@Operation(summary = "이미지 저장 API", description = "새로운 이미지를 저장합니다.", security = {
+		@SecurityRequirement(name = "bearerAuth")})
 	@PostMapping
 	public ResponseEntity<ImageResDto> uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
 		Image image = imageService.imageUpload(file);
 		return ResponseEntity.status(HttpStatus.CREATED).body(ImageResDto.toDto(image));
 	}
 
-
-	@Operation(
-		summary = "이미지 수정 API",
-		description = "이미지를 수정합니다.",
-		security = {@SecurityRequirement(name = "bearerAuth")}
-	)
+	@Operation(summary = "이미지 수정 API", description = "이미지를 수정합니다.", security = {
+		@SecurityRequirement(name = "bearerAuth")})
 	@PutMapping("/{id}")
-	public ResponseEntity<ImageResDto> updateImage(@RequestParam("file") MultipartFile file, @PathVariable @Valid Long id) throws IOException {
+	public ResponseEntity<ImageResDto> updateImage(@RequestParam("file") MultipartFile file,
+		@PathVariable @Valid Long id) throws IOException {
 		Image image = imageService.imageUpdate(file, id);
 		return ResponseEntity.status(HttpStatus.CREATED).body(ImageResDto.toDto(image));
 	}
