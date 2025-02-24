@@ -1,7 +1,10 @@
 package com.potatocountry.potatocountry.domain.comment.dto.response;
 
+import com.potatocountry.potatocountry.data.entitiy.Comment;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +26,23 @@ public class CommentCreateResDto {
 
 	@Schema(description = "댓글 내용", example = "안녕하세요.")
 	private String content;
+
+	@Builder
+	private CommentCreateResDto(Long id, Long parentId, Long userId, Long postId, String content) {
+		this.id = id;
+		this.parentId = parentId;
+		this.userId = userId;
+		this.postId = postId;
+		this.content = content;
+	}
+
+	public static CommentCreateResDto toDto(Comment comment) {
+		return builder()
+			.id(comment.getId())
+			.parentId(comment.getParentId())
+			.userId(comment.getUser().getId())
+			.postId(comment.getPost().getId())
+			.content(comment.getContent())
+			.build();
+	}
 }

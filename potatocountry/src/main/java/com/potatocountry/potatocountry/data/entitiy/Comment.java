@@ -34,4 +34,12 @@ public class Comment extends BaseEntity {
 	private String content;
 
 	private boolean status;
+
+	public Comment(User user, Post post, Long parentId, String content) {
+		this.user = user;
+		this.post = post;
+		this.parentId = parentId;
+		this.content = content;
+		this.status = true;
+	}
 }
