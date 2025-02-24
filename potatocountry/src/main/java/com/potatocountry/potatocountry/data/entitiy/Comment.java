@@ -1,5 +1,6 @@
 package com.potatocountry.potatocountry.data.entitiy;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +29,9 @@ public class Comment extends BaseEntity {
 	private Post post;
 
 	private Long parentId;
+
+	@Column(nullable = false)
+	private String content;
 
 	private boolean status;
 }
