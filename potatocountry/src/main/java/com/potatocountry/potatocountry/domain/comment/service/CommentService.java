@@ -24,12 +24,21 @@ public class CommentService {
 	private final UserRepository userRepository;
 	private final CommentRepository commentRepository;
 
+	@Transactional
 	public CommentCreateResDto createComment(CommentCreateReqDto commentCreateReqDto, Long authUserId) {
+		validateParentId(commentCreateReqDto);
 		Post post = postRepository.findById(commentCreateReqDto.getPostId())
 			.orElseThrow(() -> new CustomException(CustomError.POST_NOT_FOUND));
 		User user = userRepository.getByAuthUserId(authUserId);
 		Comment comment = new Comment(user, post, commentCreateReqDto.getParentId(), commentCreateReqDto.getContent());
 		commentRepository.save(comment);
 		return CommentCreateResDto.toDto(comment);
+	}
+
+	private void validateParentId(CommentCreateReqDto commentCreateReqDto) {
+		if (commentCreateReqDto.getParentId() != null
+			&& !commentRepository.existsById(commentCreateReqDto.getParentId())) {
+			throw new CustomException(CustomError.COMMENT_NOT_FOUND);
+		}
 	}
 }
