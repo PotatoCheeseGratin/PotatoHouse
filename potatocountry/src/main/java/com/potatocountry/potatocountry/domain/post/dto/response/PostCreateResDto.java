@@ -47,7 +47,7 @@ public class PostCreateResDto {
 	}
 
 	public static PostCreateResDto toDto(Post post) {
-		return PostCreateResDto.builder()
+		return builder()
 			.id(post.getId())
 			.category(post.getCategory())
 			.title(post.getTitle())

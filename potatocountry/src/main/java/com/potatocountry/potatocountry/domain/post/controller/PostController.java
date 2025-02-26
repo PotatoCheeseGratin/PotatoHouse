@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.potatocountry.potatocountry.domain.post.dto.request.PostCreateReqDto;
 import com.potatocountry.potatocountry.domain.post.dto.request.PostUpdateReqDto;
 import com.potatocountry.potatocountry.domain.post.dto.response.PostCreateResDto;
+import com.potatocountry.potatocountry.domain.post.dto.response.PostInfoResDto;
 import com.potatocountry.potatocountry.domain.post.dto.response.PostResDto;
 import com.potatocountry.potatocountry.domain.post.dto.response.PostUpdateResDto;
 import com.potatocountry.potatocountry.domain.post.service.PostService;
@@ -78,13 +79,12 @@ public class PostController {
 		security = {@SecurityRequirement(name = "bearerAuth")}
 	)
 	@ApiResponses({
-		@ApiResponse(responseCode = "204", description = "204 성공",
-			content = @Content(mediaType = "application/json", schema = @Schema(implementation = PostResDto.class))),
+		@ApiResponse(responseCode = "204", description = "204 성공"),
 		@ApiResponse(responseCode = "PT100", description = "404 존재하지 않은 게시판 입니다.",
 			content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResDto.class))),
 	})
 	@DeleteMapping("/{id}")
-	public ResponseEntity<PostResDto> deletePost(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+	public ResponseEntity<Void> deletePost(@AuthenticationPrincipal CustomUserDetails customUserDetails,
 		@PathVariable @Valid Long id) {
 		postService.postDelete(customUserDetails, id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -102,8 +102,8 @@ public class PostController {
 			content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResDto.class))),
 	})
 	@GetMapping("/{id}")
-	public ResponseEntity<PostResDto> getPost(@PathVariable @Valid Long id) {
-		PostResDto postResDto = postService.postGet(id);
-		return ResponseEntity.status(HttpStatus.OK).body(postResDto);
+	public ResponseEntity<PostInfoResDto> getPost(@PathVariable @Valid Long id) {
+		PostInfoResDto postInfoResDto = postService.postGet(id);
+		return ResponseEntity.status(HttpStatus.OK).body(postInfoResDto);
 	}
 }

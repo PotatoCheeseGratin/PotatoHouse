@@ -9,6 +9,7 @@ import com.potatocountry.potatocountry.data.entitiy.Image;
 import com.potatocountry.potatocountry.data.entitiy.ImageCollection;
 import com.potatocountry.potatocountry.data.entitiy.Post;
 import com.potatocountry.potatocountry.data.entitiy.User;
+import com.potatocountry.potatocountry.data.repository.CommentRepository;
 import com.potatocountry.potatocountry.data.repository.ImageCollectionRepository;
 import com.potatocountry.potatocountry.data.repository.ImageRepository;
 import com.potatocountry.potatocountry.data.repository.PostRepository;
@@ -16,7 +17,7 @@ import com.potatocountry.potatocountry.data.repository.UserRepository;
 import com.potatocountry.potatocountry.domain.post.dto.request.PostCreateReqDto;
 import com.potatocountry.potatocountry.domain.post.dto.request.PostUpdateReqDto;
 import com.potatocountry.potatocountry.domain.post.dto.response.PostCreateResDto;
-import com.potatocountry.potatocountry.domain.post.dto.response.PostResDto;
+import com.potatocountry.potatocountry.domain.post.dto.response.PostInfoResDto;
 import com.potatocountry.potatocountry.domain.post.dto.response.PostUpdateResDto;
 import com.potatocountry.potatocountry.global.error.CustomError;
 import com.potatocountry.potatocountry.global.error.CustomException;
@@ -32,6 +33,7 @@ public class PostService {
 	private final UserRepository userRepository;
 	private final ImageRepository imageRepository;
 	private final ImageCollectionRepository imageCollectionRepository;
+	private final CommentRepository commentRepository;
 
 	@Transactional
 	public PostCreateResDto postCreate(CustomUserDetails customUserDetails, PostCreateReqDto postCreateReqDto) {
@@ -70,9 +72,10 @@ public class PostService {
 		post.delete();
 	}
 
-	public PostResDto postGet(Long id) {
+	public PostInfoResDto postGet(Long id) {
 		Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(CustomError.POST_NOT_FOUND));
-		return PostResDto.toDto(post);
+
+		return PostInfoResDto.toDto(post);
 	}
 
 	public void validAuthor(User user, Post post) {
