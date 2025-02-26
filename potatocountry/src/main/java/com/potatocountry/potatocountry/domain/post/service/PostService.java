@@ -13,7 +13,9 @@ import com.potatocountry.potatocountry.data.repository.ImageCollectionRepository
 import com.potatocountry.potatocountry.data.repository.ImageRepository;
 import com.potatocountry.potatocountry.data.repository.PostRepository;
 import com.potatocountry.potatocountry.data.repository.UserRepository;
+import com.potatocountry.potatocountry.domain.post.dto.request.PostCreateReqDto;
 import com.potatocountry.potatocountry.domain.post.dto.request.PostReqDto;
+import com.potatocountry.potatocountry.domain.post.dto.response.PostCreateResDto;
 import com.potatocountry.potatocountry.domain.post.dto.response.PostResDto;
 import com.potatocountry.potatocountry.global.error.CustomError;
 import com.potatocountry.potatocountry.global.error.CustomException;
@@ -31,20 +33,20 @@ public class PostService {
 	private final ImageCollectionRepository imageCollectionRepository;
 
 	@Transactional
-	public PostResDto postCreate(CustomUserDetails customUserDetails, PostReqDto postReqDto) {
+	public PostCreateResDto postCreate(CustomUserDetails customUserDetails, PostCreateReqDto postCreateReqDto) {
 		User user = userRepository.getByAuthUserId(customUserDetails.getId());
 
 		// imageCollection mapping하기
 		ImageCollection imageCollection = new ImageCollection();
 		imageCollectionRepository.save(imageCollection);
-		List<Long> imageIds = postReqDto.getImageIds();
+		List<Long> imageIds = postCreateReqDto.getImageIds();
 		List<Image> imageLists = imageRepository.findByIdIn(imageIds);
 		for (Image image : imageLists) {
 			image.mappingImageCollection(imageCollection);
 		}
-		Post post = postReqDto.toEntity(user, postReqDto, imageCollection);
+		Post post = PostCreateReqDto.toEntity(user, postCreateReqDto, imageCollection);
 		postRepository.save(post);
-		return PostResDto.toDto(post);
+		return PostCreateResDto.toDto(post);
 	}
 
 	@Transactional

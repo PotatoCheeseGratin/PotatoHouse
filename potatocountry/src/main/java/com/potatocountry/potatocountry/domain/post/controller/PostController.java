@@ -3,8 +3,8 @@ package com.potatocountry.potatocountry.domain.post.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.potatocountry.potatocountry.domain.post.dto.request.PostCreateReqDto;
 import com.potatocountry.potatocountry.domain.post.dto.request.PostReqDto;
+import com.potatocountry.potatocountry.domain.post.dto.response.PostCreateResDto;
 import com.potatocountry.potatocountry.domain.post.dto.response.PostResDto;
 import com.potatocountry.potatocountry.domain.post.service.PostService;
 import com.potatocountry.potatocountry.global.error.dto.ErrorResDto;
@@ -45,10 +47,10 @@ public class PostController {
 			content = @Content(mediaType = "application/json", schema = @Schema(implementation = PostResDto.class))),
 	})
 	@PostMapping
-	public ResponseEntity<PostResDto> createPost(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-		@RequestBody @Valid PostReqDto postReqDto) {
-		PostResDto postResDto = postService.postCreate(customUserDetails, postReqDto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(postResDto);
+	public ResponseEntity<PostCreateResDto> createPost(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+		@RequestBody @Valid PostCreateReqDto postCreateReqDto) {
+		PostCreateResDto postCreateResDto = postService.postCreate(customUserDetails, postCreateReqDto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(postCreateResDto);
 	}
 
 	@Operation(
@@ -80,7 +82,7 @@ public class PostController {
 		@ApiResponse(responseCode = "PT100", description = "404 존재하지 않은 게시판 입니다.",
 			content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResDto.class))),
 	})
-	@PatchMapping("/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<PostResDto> deletePost(@AuthenticationPrincipal CustomUserDetails customUserDetails,
 		@PathVariable @Valid Long id) {
 		postService.postDelete(customUserDetails, id);
