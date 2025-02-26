@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.potatocountry.potatocountry.domain.post.dto.request.PostCreateReqDto;
-import com.potatocountry.potatocountry.domain.post.dto.request.PostReqDto;
+import com.potatocountry.potatocountry.domain.post.dto.request.PostUpdateReqDto;
 import com.potatocountry.potatocountry.domain.post.dto.response.PostCreateResDto;
 import com.potatocountry.potatocountry.domain.post.dto.response.PostResDto;
+import com.potatocountry.potatocountry.domain.post.dto.response.PostUpdateResDto;
 import com.potatocountry.potatocountry.domain.post.service.PostService;
 import com.potatocountry.potatocountry.global.error.dto.ErrorResDto;
 import com.potatocountry.potatocountry.global.security.dto.CustomUserDetails;
@@ -65,10 +66,10 @@ public class PostController {
 			content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResDto.class))),
 	})
 	@PutMapping("/{id}")
-	public ResponseEntity<PostResDto> updatePost(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-		@RequestBody @Valid PostReqDto postReqDto, @PathVariable @Valid Long id) {
-		PostResDto postResDto = postService.postUpdate(customUserDetails, postReqDto, id);
-		return ResponseEntity.status(HttpStatus.OK).body(postResDto);
+	public ResponseEntity<PostUpdateResDto> updatePost(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+		@RequestBody @Valid PostUpdateReqDto postUpdateReqDto, @PathVariable @Valid Long id) {
+		PostUpdateResDto postUpdateResDto = postService.postUpdate(customUserDetails, postUpdateReqDto, id);
+		return ResponseEntity.status(HttpStatus.OK).body(postUpdateResDto);
 	}
 
 	@Operation(

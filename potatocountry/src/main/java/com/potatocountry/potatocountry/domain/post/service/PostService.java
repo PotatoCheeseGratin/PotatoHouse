@@ -14,9 +14,10 @@ import com.potatocountry.potatocountry.data.repository.ImageRepository;
 import com.potatocountry.potatocountry.data.repository.PostRepository;
 import com.potatocountry.potatocountry.data.repository.UserRepository;
 import com.potatocountry.potatocountry.domain.post.dto.request.PostCreateReqDto;
-import com.potatocountry.potatocountry.domain.post.dto.request.PostReqDto;
+import com.potatocountry.potatocountry.domain.post.dto.request.PostUpdateReqDto;
 import com.potatocountry.potatocountry.domain.post.dto.response.PostCreateResDto;
 import com.potatocountry.potatocountry.domain.post.dto.response.PostResDto;
+import com.potatocountry.potatocountry.domain.post.dto.response.PostUpdateResDto;
 import com.potatocountry.potatocountry.global.error.CustomError;
 import com.potatocountry.potatocountry.global.error.CustomException;
 import com.potatocountry.potatocountry.global.security.dto.CustomUserDetails;
@@ -50,13 +51,14 @@ public class PostService {
 	}
 
 	@Transactional
-	public PostResDto postUpdate(CustomUserDetails customUserDetails, PostReqDto postReqDto, Long id) {
+	public PostUpdateResDto postUpdate(CustomUserDetails customUserDetails, PostUpdateReqDto postUpdateReqDto,
+		Long id) {
 		User user = userRepository.getByAuthUserId(customUserDetails.getId());
 		Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(CustomError.POST_NOT_FOUND));
 
 		validAuthor(user, post);
-		post.updatePost(postReqDto);
-		return PostResDto.toDto(post);
+		post.update(postUpdateReqDto.getCategory(), postUpdateReqDto.getTitle(), postUpdateReqDto.getContent());
+		return PostUpdateResDto.toDto(post);
 	}
 
 	@Transactional
@@ -65,7 +67,7 @@ public class PostService {
 		Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(CustomError.POST_NOT_FOUND));
 
 		validAuthor(user, post);
-		post.deletePost();
+		post.delete();
 	}
 
 	public PostResDto postGet(Long id) {
