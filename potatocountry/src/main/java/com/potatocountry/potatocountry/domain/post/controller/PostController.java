@@ -16,7 +16,6 @@ import com.potatocountry.potatocountry.domain.post.dto.request.PostCreateReqDto;
 import com.potatocountry.potatocountry.domain.post.dto.request.PostUpdateReqDto;
 import com.potatocountry.potatocountry.domain.post.dto.response.PostCreateResDto;
 import com.potatocountry.potatocountry.domain.post.dto.response.PostInfoResDto;
-import com.potatocountry.potatocountry.domain.post.dto.response.PostResDto;
 import com.potatocountry.potatocountry.domain.post.dto.response.PostUpdateResDto;
 import com.potatocountry.potatocountry.domain.post.service.PostService;
 import com.potatocountry.potatocountry.global.error.dto.ErrorResDto;
@@ -46,7 +45,10 @@ public class PostController {
 	)
 	@ApiResponses({
 		@ApiResponse(responseCode = "201", description = "201 성공",
-			content = @Content(mediaType = "application/json", schema = @Schema(implementation = PostResDto.class))),
+			content = @Content(
+				mediaType = "application/json",
+				schema = @Schema(implementation = PostCreateResDto.class)
+			)),
 	})
 	@PostMapping
 	public ResponseEntity<PostCreateResDto> createPost(@AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -62,7 +64,10 @@ public class PostController {
 	)
 	@ApiResponses({
 		@ApiResponse(responseCode = "200", description = "200 성공",
-			content = @Content(mediaType = "application/json", schema = @Schema(implementation = PostResDto.class))),
+			content = @Content(
+				mediaType = "application/json",
+				schema = @Schema(implementation = PostUpdateResDto.class)
+			)),
 		@ApiResponse(responseCode = "PT100", description = "404 존재하지 않은 게시판 입니다.",
 			content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResDto.class))),
 	})
@@ -97,7 +102,10 @@ public class PostController {
 	)
 	@ApiResponses({
 		@ApiResponse(responseCode = "200", description = "200 성공",
-			content = @Content(mediaType = "application/json", schema = @Schema(implementation = PostResDto.class))),
+			content = @Content(
+				mediaType = "application/json",
+				schema = @Schema(implementation = PostInfoResDto.class)
+			)),
 		@ApiResponse(responseCode = "PT100", description = "404 존재하지 않은 게시판 입니다.",
 			content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResDto.class))),
 	})

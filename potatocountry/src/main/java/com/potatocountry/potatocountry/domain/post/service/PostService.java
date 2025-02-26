@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.potatocountry.potatocountry.data.entitiy.Comment;
 import com.potatocountry.potatocountry.data.entitiy.Image;
 import com.potatocountry.potatocountry.data.entitiy.ImageCollection;
 import com.potatocountry.potatocountry.data.entitiy.Post;
@@ -74,8 +75,8 @@ public class PostService {
 
 	public PostInfoResDto postGet(Long id) {
 		Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(CustomError.POST_NOT_FOUND));
-
-		return PostInfoResDto.toDto(post);
+		List<Comment> comments = commentRepository.findByPostId(post.getId());
+		return PostInfoResDto.toDto(post, comments);
 	}
 
 	public void validAuthor(User user, Post post) {
